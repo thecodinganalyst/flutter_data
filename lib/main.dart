@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
-const AlbumsApi = 'https://jsonplaceholder.typicode.com/albums';
+const albumsApi = 'https://jsonplaceholder.typicode.com/albums';
 
 class Album {
   final int userId;
@@ -27,7 +27,7 @@ class Album {
 }
 
 Future<List<Album>> fetchAlbumList() async {
-  final response = await http.get(Uri.parse('$AlbumsApi'));
+  final response = await http.get(Uri.parse('$albumsApi'));
 
   if(response.statusCode == 200){
     Iterable list = jsonDecode(response.body);
@@ -38,7 +38,7 @@ Future<List<Album>> fetchAlbumList() async {
 }
 
 Future<Album> fetchAlbum(int id) async {
-  final response = await http.get(Uri.parse('$AlbumsApi/$id'));
+  final response = await http.get(Uri.parse('$albumsApi/$id'));
 
   if(response.statusCode == 200) {
     return Album.fromJson(jsonDecode(response.body));
@@ -59,6 +59,27 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Fetch Data Example',
+      theme: ThemeData(
+        primarySwatch: Colors.lightBlue
+      ),
+      home: const BottomNavigation()
+    );
+  }
+}
+
+class BottomNavigation extends StatefulWidget {
+  const BottomNavigation({Key? key}) : super(key: key);
+
+  @override
+  State<BottomNavigation> createState() => _BottomNavigationState();
+}
+
+class _BottomNavigationState extends State<BottomNavigation> {
+  int _selectedIndex = 0;
   late Future<List<Album>> futureAlbumList;
 
   @override
@@ -67,34 +88,63 @@ class _MyAppState extends State<MyApp> {
     futureAlbumList = fetchAlbumList();
   }
 
+  Widget getWidget(){
+    return FutureAlbumListView(futureAlbumList: futureAlbumList);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Fetch Data Example',
-      theme: ThemeData(
-        primarySwatch: Colors.lightBlue
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Json Placeholder'),
       ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Fetch Data Example'),
-        ),
-        body: FutureBuilder<List<Album>>(
-          future: futureAlbumList,
-          builder: (context, snapshot) {
-            if(snapshot.hasData) {
-              return AlbumListView(albumList: snapshot.data!);
-            }else if(snapshot.hasError) {
-              return Center(
-                child: Text('${snapshot.error}'),
-              );
-            }
-            return const CircularProgressIndicator();
-          },
-        ),
+      body: getWidget(),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.album),
+            label: 'Albums'
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.photo),
+            label: 'Photos'
+          )
+        ],
+        currentIndex: _selectedIndex,
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
       ),
     );
   }
 }
+
+class FutureAlbumListView extends StatelessWidget {
+  final Future<List<Album>> futureAlbumList;
+  const FutureAlbumListView({super.key, required this.futureAlbumList});
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<List<Album>>(
+      future: futureAlbumList,
+      builder: (context, snapshot) {
+        if(snapshot.hasData){
+          return AlbumListView(albumList: snapshot.data!);
+        }else if(snapshot.hasError){
+          return Center(
+            child: Text('${snapshot.error}')
+          );
+        }
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+  }
+}
+
 
 class AlbumListView extends StatelessWidget {
   final List<Album> albumList;
@@ -113,7 +163,7 @@ class AlbumListView extends StatelessWidget {
         );
       },
       separatorBuilder: (context, i) {
-        return Divider();
+        return const Divider();
       },
     );
   }
