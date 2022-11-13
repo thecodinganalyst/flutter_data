@@ -16,19 +16,22 @@ class _AlbumFormViewState extends State<AlbumFormView> {
 
   Column buildColumn(){
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         TextField(
           controller: _controller,
           decoration: const InputDecoration(hintText: 'Enter Title'),
         ),
-        ElevatedButton(
-          onPressed: () {
-            setState(() {
-              _futureAlbum = _albumService.createAlbum(_controller.text);
-            });
-          },
-          child: const Text('Create Data')
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16.0),
+          child: ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  _futureAlbum = _albumService.createAlbum(_controller.text);
+                });
+              },
+              child: const Text('Create Data')
+          ),
         )
       ],
     );

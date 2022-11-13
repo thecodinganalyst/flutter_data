@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_data/album/albumFormView.dart';
 import 'package:flutter_data/album/albumService.dart';
 import 'album.dart';
 
@@ -46,18 +47,31 @@ class AlbumListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      itemCount: albumList.length,
-      itemBuilder: (context, i) {
-        final album = albumList[i];
-        return ListTile(
-          leading: Text(album.id.toString()),
-          title: Text(album.title),
-        );
-      },
-      separatorBuilder: (context, i) {
-        return const Divider();
-      },
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Albums'),
+      ),
+      body: ListView.separated(
+        itemCount: albumList.length,
+        itemBuilder: (context, i) {
+          final album = albumList[i];
+          return ListTile(
+            leading: Text(album.id.toString()),
+            title: Text(album.title),
+          );
+        },
+        separatorBuilder: (context, i) {
+          return const Divider();
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const AlbumFormView()));
+        },
+      ),
     );
+
+
   }
 }

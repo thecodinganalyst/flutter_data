@@ -60,9 +60,6 @@ class _BottomNavigationState extends State<BottomNavigation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Json Placeholder'),
-      ),
       body: getWidget(),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
