@@ -7,6 +7,24 @@ class AlbumService {
 
   static const albumsApi = 'https://jsonplaceholder.typicode.com/albums';
 
+  Future<Album> createAlbum(String title) async {
+    final response = await http.post(
+      Uri.parse(albumsApi),
+      headers: <String, String> {
+        'Content-Type': 'application/json; charset=UTF-8'
+      },
+      body: jsonEncode(<String, String>{
+        'title': title
+      })
+    );
+
+    if(response.statusCode == 201){
+      return Album.fromJson(jsonDecode(response.body));
+    }else{
+      throw Exception('Failed to create album');
+    }
+  }
+
   Future<List<Album>> fetchAlbumList() async {
     final response = await http.get(Uri.parse(albumsApi));
 
