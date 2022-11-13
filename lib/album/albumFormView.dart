@@ -14,7 +14,7 @@ class _AlbumFormViewState extends State<AlbumFormView> {
   final TextEditingController _controller = TextEditingController();
   Future<Album>? _futureAlbum;
 
-  Column buildColumn(){
+  Column showForm(){
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
@@ -25,19 +25,19 @@ class _AlbumFormViewState extends State<AlbumFormView> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 16.0),
           child: ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  _futureAlbum = _albumService.createAlbum(_controller.text);
-                });
-              },
-              child: const Text('Create Data')
+            onPressed: () {
+              setState(() {
+                _futureAlbum = _albumService.createAlbum(_controller.text);
+              });
+            },
+            child: const Text('Create Data')
           ),
         )
       ],
     );
   }
 
-  FutureBuilder<Album> buildFutureBuilder(){
+  FutureBuilder<Album> showResult(){
     return FutureBuilder<Album>(
       future: _futureAlbum,
       builder: (context, snapshot) {
@@ -62,7 +62,7 @@ class _AlbumFormViewState extends State<AlbumFormView> {
         body: Container(
           alignment: Alignment.center,
           padding: const EdgeInsets.all(8.0),
-          child: (_futureAlbum == null) ? buildColumn() : buildFutureBuilder(),
+          child: _futureAlbum == null ? showForm() : showResult()
         ),
       ),
     );
