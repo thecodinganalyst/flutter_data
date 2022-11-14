@@ -40,8 +40,6 @@ class BottomNavigation extends StatefulWidget {
 
 class _BottomNavigationState extends State<BottomNavigation> {
   int _selectedIndex = 0;
-  late Future<List<Album>> futureAlbumList;
-  late Future<List<Photo>> futurePhotoList;
 
   @override
   void initState(){
