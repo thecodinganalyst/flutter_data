@@ -1,10 +1,5 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-
-import 'photo/photo.dart';
 import 'photo/photosListView.dart';
-
-import 'album/album.dart';
 import 'album/albumListView.dart';
 
 void main() {
