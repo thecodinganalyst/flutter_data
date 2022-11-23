@@ -47,7 +47,6 @@ class _BottomNavigationState extends State<BottomNavigation> {
     }else{
       return const FuturePhotosListView();
     }
-
   }
 
   @override

@@ -36,8 +36,8 @@ class AlbumService {
     }
   }
 
-  Future<Album> fetchAlbum(int id) async {
-    final response = await http.get(Uri.parse('$albumsApi/$id'));
+  Future<Album> fetchAlbum(http.Client client, int id) async {
+    final response = await client.get(Uri.parse('$albumsApi/$id'));
 
     if(response.statusCode == 200) {
       return Album.fromJson(jsonDecode(response.body));
